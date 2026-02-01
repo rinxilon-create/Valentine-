@@ -1,151 +1,212 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Be My Valentine 💖</title>
+<meta charset="UTF-8">
+<title>Be My Valentine 💖</title>
 
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-  <style>
-    body {
-      height: 100vh;
-      margin: 0;
-      background: linear-gradient(135deg, #ff6fa5, #ff9a9e);
-      font-family: Arial, sans-serif;
-      overflow: hidden;
-    }
+<style>
+body {
+  height: 100vh;
+  margin: 0;
+  background: linear-gradient(135deg, #ff6fa5, #ff9a9e);
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+}
 
-    .container {
-      position: relative;
-      z-index: 3;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-    }
+.container {
+  position: relative;
+  z-index: 3;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
 
-    h1 {
-      color: white;
-      font-size: 36px;
-      margin-bottom: 25px;
-      text-shadow: 0 4px 10px rgba(0,0,0,0.4);
-    }
+h1 {
+  color: white;
+  font-size: 36px;
+  margin-bottom: 25px;
+  text-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
 
-    button {
-      padding: 14px 32px;
-      font-size: 18px;
-      border: none;
-      border-radius: 30px;
-      cursor: pointer;
-      margin: 12px;
-    }
+button {
+  padding: 14px 32px;
+  font-size: 18px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  margin: 12px;
+}
 
-    #yes {
-      background: #ff3d81;
-      color: white;
-    }
+#yes {
+  background: #ff3d81;
+  color: white;
+}
 
-    #no {
-      background: #eee;
-      position: absolute;
-    }
+#no {
+  background: #eee;
+  position: absolute;
+}
 
-    @keyframes shake {
-      0% { transform: translateX(0); }
-      25% { transform: translateX(-6px); }
-      50% { transform: translateX(6px); }
-      75% { transform: translateX(-6px); }
-      100% { transform: translateX(0); }
-    }
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  50% { transform: translateX(6px); }
+  75% { transform: translateX(-6px); }
+  100% { transform: translateX(0); }
+}
 
-    .shake {
-      animation: shake 0.25s;
-    }
+.shake {
+  animation: shake 0.25s;
+}
 
-    .petal {
-      position: fixed;
-      top: -50px;
-      width: 35px;
-      pointer-events: none;
-      z-index: 2;
-      animation: fall linear infinite;
-    }
+.petal {
+  position: fixed;
+  top: -50px;
+  width: 35px;
+  pointer-events: none;
+  z-index: 2;
+  animation: fall linear infinite;
+}
 
-    @keyframes fall {
-      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(120vh) rotate(360deg); opacity: 0.7; }
-    }
+@keyframes fall {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(120vh) rotate(360deg); }
+}
 
-    .center-img {
-      position: fixed;
-      inset: 0;
-      background: black;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 10;
-    }
+/* Gift Modal */
+.gift-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 20;
+}
 
-    .center-img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  </style>
+.gift-box {
+  width: 220px;
+  height: 220px;
+  background: #ff3d81;
+  border-radius: 18px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 60px;
+  color: white;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+}
+
+.gift-text {
+  display: none;
+  font-size: 20px;
+  text-align: center;
+  padding: 20px;
+  font-weight: bold;
+}
+
+/* Final Image */
+.center-img {
+  position: fixed;
+  inset: 0;
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 30;
+}
+
+.center-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+}
+</style>
 </head>
+
 <body>
 
-  <div class="container">
-    <h1>Will you be my Valentine? 💘</h1>
+<!-- 🎵 Background Music -->
+<audio id="bgMusic" loop>
+  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_9c58c6f5e1.mp3" type="audio/mpeg">
+</audio>
 
-    <button id="yes" onclick="yesClicked()">Yes ❤️</button>
-    <button id="no" onmouseover="moveNo()" onclick="moveNo()">No ❌</button>
-  </div>
+<div class="container">
+  <h1>Will you be my Valentine? 💘</h1>
+  <button id="yes" onclick="yesClicked()">Yes ❤️</button>
+  <button id="no" onmouseover="moveNo()" onclick="moveNo()">No ❌</button>
+</div>
 
-  <script>
-    function startSakura() {
-      setInterval(() => {
-        const petal = document.createElement("img");
-        petal.src = "https://i.imgur.com/JYUB0m3.png";
-        petal.className = "petal";
-        petal.style.left = Math.random() * 100 + "vw";
-        petal.style.animationDuration = 5 + Math.random() * 3 + "s";
-        document.body.appendChild(petal);
+<script>
+// Sakura petals
+setInterval(() => {
+  const petal = document.createElement("img");
+  petal.src = "https://i.imgur.com/JYUB0m3.png";
+  petal.className = "petal";
+  petal.style.left = Math.random() * 100 + "vw";
+  petal.style.animationDuration = 5 + Math.random() * 3 + "s";
+  document.body.appendChild(petal);
+  setTimeout(() => petal.remove(), 9000);
+}, 300);
 
-        setTimeout(() => petal.remove(), 9000);
-      }, 300);
-    }
+// No button movement
+function moveNo() {
+  const noBtn = document.getElementById("no");
+  noBtn.classList.add("shake");
+  setTimeout(() => noBtn.classList.remove("shake"), 250);
+  noBtn.style.left = Math.random() * (window.innerWidth - 120) + "px";
+  noBtn.style.top = Math.random() * (window.innerHeight - 80) + "px";
+}
 
-    startSakura();
+// Yes button logic
+function yesClicked() {
+  const music = document.getElementById("bgMusic");
+  music.volume = 0.4;
+  music.play();
 
-    function moveNo() {
-      const noBtn = document.getElementById("no");
-      noBtn.classList.add("shake");
-      setTimeout(() => noBtn.classList.remove("shake"), 250);
+  confetti({ particleCount: 300, spread: 140 });
 
-      const x = Math.random() * (window.innerWidth - 120);
-      const y = Math.random() * (window.innerHeight - 80);
-      noBtn.style.left = x + "px";
-      noBtn.style.top = y + "px";
-    }
+  const modal = document.createElement("div");
+  modal.className = "gift-modal";
+  modal.innerHTML = `
+    <div class="gift-box" id="giftBox">
+      🎁
+      <div class="gift-text" id="giftText">
+        You're my wife love 💍<br>
+        We are married soon ❤️
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
 
-    function yesClicked() {
-      confetti({
-        particleCount: 500,
-        spread: 140,
-        origin: { y: 0.6 }
-      });
+  document.getElementById("giftBox").onclick = () => {
+    document.getElementById("giftText").style.display = "block";
 
-      const center = document.createElement("div");
-      center.className = "center-img";
-      center.innerHTML = `
-        <img src="anime-couple.jpg">
-      `;
-      document.body.appendChild(center);
-    }
-  </script>
+    confetti({ particleCount: 500, spread: 180 });
+
+    setTimeout(showImage, 1200);
+  };
+}
+
+// Final image + tap confetti
+function showImage() {
+  const center = document.createElement("div");
+  center.className = "center-img";
+  center.innerHTML = `<img id="finalImage" src="anime-couple.jpg">`;
+  document.body.appendChild(center);
+
+  document.getElementById("finalImage").onclick = () => {
+    confetti({ particleCount: 400, spread: 200 });
+  };
+}
+</script>
 
 </body>
 </html>
