@@ -67,14 +67,48 @@ button {
   to { transform: translateY(120vh) rotate(360deg); }
 }
 
-/* Rocket scene */
+/* Gift modal */
+.gift-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.gift-box {
+  width: 220px;
+  height: 220px;
+  background: #ff3d81;
+  border-radius: 18px;
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 60px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+}
+
+.gift-text {
+  display: none;
+  color: white;
+  font-size: 20px;
+  text-align: center;
+  padding: 20px;
+  font-weight: bold;
+}
+
+/* Rocket fireworks scene */
 .scene {
   position: fixed;
   inset: 0;
   background: radial-gradient(circle, #ff5fa2, #ff2d6f);
   display: none;
   overflow: hidden;
-  z-index: 10;
+  z-index: 15;
 }
 
 .rocket {
@@ -118,7 +152,16 @@ button {
   <button id="no" onmouseover="moveNo()">No ❌</button>
 </div>
 
-<!-- Rocket scene -->
+<!-- Gift modal -->
+<div class="gift-modal" id="giftModal" style="display:none;">
+  <div class="gift-box" id="giftBox">🎁
+    <div class="gift-text" id="giftText">
+      You're my love 💍<br>We are married soon ❤️
+    </div>
+  </div>
+</div>
+
+<!-- Rocket fireworks scene -->
 <div class="scene" id="scene">
   <div class="rocket">🚀</div>
 </div>
@@ -147,28 +190,34 @@ function moveNo() {
   no.style.top = Math.random() * (window.innerHeight - 80) + "px";
 }
 
-// YES clicked
+// YES clicked → show gift box
 function yesClicked() {
   confetti({ particleCount: 300, spread: 140 });
-
   document.getElementById("main").style.display = "none";
-  document.getElementById("scene").style.display = "block";
+  document.getElementById("giftModal").style.display = "flex";
 
-  // Rocket explosion
-  setTimeout(() => {
-    confetti({
-      particleCount: 600,
-      spread: 360,
-      shapes: ['heart'],
-      colors: ['#ff2d6f', '#ff5fa2', '#ffffff']
-    });
-  }, 2200);
+  // Gift box click → show fireworks
+  document.getElementById("giftBox").onclick = () => {
+    document.getElementById("giftText").style.display = "block";
+    document.getElementById("giftModal").style.display = "none";
+    document.getElementById("scene").style.display = "block";
 
-  // Show final image
-  setTimeout(() => {
-    document.getElementById("scene").style.display = "none";
-    document.getElementById("final").style.display = "flex";
-  }, 3200);
+    // Rocket + Diwali fireworks
+    setTimeout(() => {
+      confetti({
+        particleCount: 600,
+        spread: 360,
+        shapes: ['circle', 'star', 'heart'],
+        colors: ['#ff2d6f','#ff5fa2','#ffffff','#ffff00','#ff6a00']
+      });
+    }, 2200);
+
+    // Show final image
+    setTimeout(() => {
+      document.getElementById("scene").style.display = "none";
+      document.getElementById("final").style.display = "flex";
+    }, 3200);
+  };
 }
 </script>
 
