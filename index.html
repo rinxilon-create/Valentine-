@@ -7,16 +7,14 @@
   <!-- Confetti -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-  <!-- Screenshot library -->
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-
   <style>
     body {
       height: 100vh;
+      margin: 0;
       display: flex;
       justify-content: center;
       align-items: center;
-      background: linear-gradient(135deg, #ff758c, #ff7eb3);
+      background: linear-gradient(135deg, #ff6fa5, #ff9a9e);
       font-family: Arial, sans-serif;
       overflow: hidden;
     }
@@ -27,15 +25,16 @@
       padding: 40px;
       border-radius: 20px;
       box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+      z-index: 3;
     }
 
     h1 {
-      color: #ff4d6d;
+      color: #ff3d81;
       margin-bottom: 25px;
     }
 
     button {
-      padding: 14px 30px;
+      padding: 14px 32px;
       font-size: 18px;
       border: none;
       border-radius: 30px;
@@ -44,7 +43,7 @@
     }
 
     #yes {
-      background: #ff4d6d;
+      background: #ff3d81;
       color: white;
     }
 
@@ -62,23 +61,54 @@
     }
 
     .shake {
-      animation: shake 0.3s;
+      animation: shake 0.25s;
+    }
+
+    /* Anime GIF storm */
+    .anime {
+      position: fixed;
+      width: 180px;
+      z-index: 5;
+      animation: float 4s linear infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0) scale(1); opacity: 0; }
+      20% { opacity: 1; }
+      100% { transform: translateY(-120vh) scale(1.4); opacity: 0; }
+    }
+
+    /* Big central GIF */
+    .center-gif {
+      position: fixed;
+      inset: 0;
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .center-gif img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
   </style>
 </head>
 <body>
 
-  <div class="container" id="capture">
+  <div class="container">
     <h1>Will you be my Valentine? 💘</h1>
     <button id="yes" onclick="yesClicked()">Yes ❤️</button>
-    <button id="no" onmouseover="moveNo()">No ❌</button>
+    <button id="no" onmouseover="moveNo()" onclick="moveNo()">No ❌</button>
   </div>
 
   <script>
     function moveNo() {
       const noBtn = document.getElementById("no");
       noBtn.classList.add("shake");
-      setTimeout(() => noBtn.classList.remove("shake"), 300);
+      setTimeout(() => noBtn.classList.remove("shake"), 250);
 
       const x = Math.random() * (window.innerWidth - 120);
       const y = Math.random() * (window.innerHeight - 80);
@@ -87,37 +117,40 @@
     }
 
     function yesClicked() {
-      // Confetti
+      // CRAZY CONFETTI
       confetti({
-        particleCount: 250,
-        spread: 100,
+        particleCount: 500,
+        spread: 140,
         origin: { y: 0.6 }
       });
 
-      // Change screen
-      document.body.innerHTML = `
-        <div id="capture" style="text-align:center;">
-          <h1 style="color:white;font-size:40px;">YAYYY! 💖🥰</h1>
-          <p style="color:white;font-size:22px;">She said YES 😭❤️</p>
-        </div>
+      // Floating anime hearts
+      for (let i = 0; i < 12; i++) {
+        const img = document.createElement("img");
+        img.src = "https://media.giphy.com/media/26BRv0ThflsHCqDrG/giphy.gif"; // anime hearts
+        img.className = "anime";
+        img.style.left = Math.random() * 100 + "vw";
+        img.style.bottom = "-200px";
+        img.style.animationDuration = 3 + Math.random() * 2 + "s";
+        document.body.appendChild(img);
+
+        setTimeout(() => img.remove(), 5000);
+      }
+
+      // FULL SCREEN ROMANTIC ANIME GIF
+      const center = document.createElement("div");
+      center.className = "center-gif";
+      center.innerHTML = `
+        <img src="https://media.giphy.com/media/3ohs4BSacFKI7A717y/giphy.gif">
       `;
+      document.body.appendChild(center);
 
-      // Take screenshot after render
-      setTimeout(() => {
-        html2canvas(document.body).then(canvas => {
-          const link = document.createElement("a");
-          link.download = "valentine_yes.png";
-          link.href = canvas.toDataURL();
-          link.click();
-        });
-      }, 600);
-
-      // WhatsApp redirect
+      // Optional WhatsApp redirect
       setTimeout(() => {
         window.location.href =
           "https://wa.me/?text=" +
-          encodeURIComponent("She said YES ❤️🥰 Happy Valentine’s Day!");
-      }, 2000);
+          encodeURIComponent("I just said YES ❤️🥰 You planned this too well!");
+      }, 3500);
     }
   </script>
 
