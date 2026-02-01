@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -52,6 +52,7 @@
       position: absolute;
     }
 
+    /* Shake animation */
     @keyframes shake {
       0% { transform: translateX(0); }
       25% { transform: translateX(-6px); }
@@ -64,21 +65,22 @@
       animation: shake 0.25s;
     }
 
-    /* Anime GIF storm */
-    .anime {
+    /* Sakura petals */
+    .petal {
       position: fixed;
-      width: 180px;
-      z-index: 5;
-      animation: float 4s linear infinite;
+      top: -50px;
+      width: 40px;
+      pointer-events: none;
+      z-index: 6;
+      animation: fall linear infinite;
     }
 
-    @keyframes float {
-      0% { transform: translateY(0) scale(1); opacity: 0; }
-      20% { opacity: 1; }
-      100% { transform: translateY(-120vh) scale(1.4); opacity: 0; }
+    @keyframes fall {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(120vh) rotate(360deg); opacity: 0.7; }
     }
 
-    /* Big central GIF */
+    /* Full-screen anime GIF */
     .center-gif {
       position: fixed;
       inset: 0;
@@ -116,32 +118,36 @@
       noBtn.style.top = y + "px";
     }
 
+    function createPetals() {
+      for (let i = 0; i < 35; i++) {
+        const petal = document.createElement("img");
+        petal.src = "https://i.imgur.com/JYUB0m3.png"; // sakura petal
+        petal.className = "petal";
+        petal.style.left = Math.random() * 100 + "vw";
+        petal.style.animationDuration = 4 + Math.random() * 3 + "s";
+        petal.style.animationDelay = Math.random() * 2 + "s";
+        document.body.appendChild(petal);
+
+        setTimeout(() => petal.remove(), 9000);
+      }
+    }
+
     function yesClicked() {
-      // CRAZY CONFETTI
+      // Confetti
       confetti({
         particleCount: 500,
         spread: 140,
         origin: { y: 0.6 }
       });
 
-      // Floating anime hearts
-      for (let i = 0; i < 12; i++) {
-        const img = document.createElement("img");
-        img.src = "https://media.giphy.com/media/26BRv0ThflsHCqDrG/giphy.gif"; // anime hearts
-        img.className = "anime";
-        img.style.left = Math.random() * 100 + "vw";
-        img.style.bottom = "-200px";
-        img.style.animationDuration = 3 + Math.random() * 2 + "s";
-        document.body.appendChild(img);
+      // Sakura rain
+      createPetals();
 
-        setTimeout(() => img.remove(), 5000);
-      }
-
-      // FULL SCREEN ROMANTIC ANIME GIF
+      // Anime kissing GIF (ROMANTIC)
       const center = document.createElement("div");
       center.className = "center-gif";
       center.innerHTML = `
-        <img src="https://media.giphy.com/media/3ohs4BSacFKI7A717y/giphy.gif">
+        <img src="https://media.giphy.com/media/11ym3PXdJzS2iQ/giphy.gif">
       `;
       document.body.appendChild(center);
 
@@ -149,8 +155,8 @@
       setTimeout(() => {
         window.location.href =
           "https://wa.me/?text=" +
-          encodeURIComponent("I just said YES ❤️🥰 You planned this too well!");
-      }, 3500);
+          encodeURIComponent("I just said YES ❤️🌸 This felt like an anime confession scene!");
+      }, 4500);
     }
   </script>
 
