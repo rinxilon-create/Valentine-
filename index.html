@@ -16,8 +16,6 @@ body {
 }
 
 .container {
-  position: relative;
-  z-index: 3;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -52,82 +50,16 @@ button {
   position: absolute;
 }
 
-@keyframes shake {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-6px); }
-  50% { transform: translateX(6px); }
-  75% { transform: translateX(-6px); }
-  100% { transform: translateX(0); }
-}
-
-.shake {
-  animation: shake 0.25s;
-}
-
 .petal {
   position: fixed;
   top: -50px;
   width: 35px;
   pointer-events: none;
-  z-index: 2;
   animation: fall linear infinite;
 }
 
 @keyframes fall {
-  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-  100% { transform: translateY(120vh) rotate(360deg); opacity: 0.7; }
-}
-
-/* Gift Modal */
-.gift-modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 20;
-}
-
-.gift-box {
-  width: 220px;
-  height: 220px;
-  background: #ff3d81;
-  border-radius: 18px;
-  position: relative;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 60px;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.4);
-}
-
-.gift-text {
-  display: none;
-  color: white;
-  font-size: 20px;
-  text-align: center;
-  padding: 20px;
-  font-weight: bold;
-}
-
-/* Final Image */
-.center-img {
-  position: fixed;
-  inset: 0;
-  background: black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 30;
-}
-
-.center-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  cursor: pointer;
+  to { transform: translateY(120vh) rotate(360deg); }
 }
 </style>
 </head>
@@ -135,82 +67,136 @@ button {
 <body>
 
 <div class="container">
-  <h1>Will you be my Valentine? 💘</h1>
+  <h1>Will you be my Valentine, Anam? 💘</h1>
   <button id="yes" onclick="yesClicked()">Yes ❤️</button>
-  <button id="no" onmouseover="moveNo()" onclick="moveNo()">No ❌</button>
+  <button id="no" onmouseover="moveNo()">No ❌</button>
 </div>
 
 <script>
 // Sakura petals
-function startSakura() {
-  setInterval(() => {
-    const petal = document.createElement("img");
-    petal.src = "https://i.imgur.com/JYUB0m3.png";
-    petal.className = "petal";
-    petal.style.left = Math.random() * 100 + "vw";
-    petal.style.animationDuration = 5 + Math.random() * 3 + "s";
-    document.body.appendChild(petal);
-    setTimeout(() => petal.remove(), 9000);
-  }, 300);
-}
-startSakura();
+setInterval(() => {
+  const p = document.createElement("img");
+  p.src = "https://i.imgur.com/JYUB0m3.png";
+  p.className = "petal";
+  p.style.left = Math.random() * 100 + "vw";
+  p.style.animationDuration = 5 + Math.random() * 3 + "s";
+  document.body.appendChild(p);
+  setTimeout(() => p.remove(), 9000);
+}, 300);
 
-// No button movement
+// No button escape
 function moveNo() {
-  const noBtn = document.getElementById("no");
-  noBtn.classList.add("shake");
-  setTimeout(() => noBtn.classList.remove("shake"), 250);
-
-  const x = Math.random() * (window.innerWidth - 120);
-  const y = Math.random() * (window.innerHeight - 80);
-  noBtn.style.left = x + "px";
-  noBtn.style.top = y + "px";
+  const no = document.getElementById("no");
+  no.style.left = Math.random() * (window.innerWidth - 120) + "px";
+  no.style.top = Math.random() * (window.innerHeight - 80) + "px";
 }
 
-// Yes button logic
+// YES button
 function yesClicked() {
   confetti({ particleCount: 300, spread: 140 });
 
-  const modal = document.createElement("div");
-  modal.className = "gift-modal";
-  modal.innerHTML = `
-    <div class="gift-box" id="giftBox">
-      🎁
-      <div class="gift-text" id="giftText">
-        You're my wife love 💍<br>
-        We are married soon ❤️
-      </div>
-    </div>
-  `;
-  document.body.appendChild(modal);
+  const win = window.open("", "_blank", "width=600,height=800");
 
-  document.getElementById("giftBox").onclick = () => {
-    document.getElementById("giftText").style.display = "block";
-
-    confetti({
-      particleCount: 500,
-      spread: 180
-    });
-
-    setTimeout(showImage, 1000);
-  };
+  win.document.write(`
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Surprise 💖</title>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  background: radial-gradient(circle, #ff5fa2, #ff2d6f);
+  overflow: hidden;
+  font-family: Arial, sans-serif;
 }
 
-// Final image + tap confetti
-function showImage() {
-  const center = document.createElement("div");
-  center.className = "center-img";
-  center.innerHTML = `
-    <img id="finalImage" src="anime-couple.jpg">
-  `;
-  document.body.appendChild(center);
+.rocket {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 80px;
+  animation: launch 2.5s ease-out forwards;
+}
 
-  document.getElementById("finalImage").onclick = () => {
-    confetti({
-      particleCount: 400,
-      spread: 200
-    });
-  };
+@keyframes launch {
+  to { transform: translate(-50%, -120vh); }
+}
+
+.name {
+  position: absolute;
+  top: 40%;
+  width: 100%;
+  text-align: center;
+  font-size: 48px;
+  color: white;
+  font-weight: bold;
+  opacity: 0;
+  text-shadow: 0 0 20px #fff, 0 0 40px #ff5fa2;
+}
+
+.ring {
+  position: absolute;
+  top: 52%;
+  width: 100%;
+  text-align: center;
+  font-size: 70px;
+  display: none;
+}
+
+.final {
+  position: fixed;
+  inset: 0;
+  background: black;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.final img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+</style>
+</head>
+
+<body>
+
+<div class="rocket">🚀</div>
+<div class="name" id="name">Anam 💖</div>
+<div class="ring" id="ring">💍</div>
+
+<div class="final" id="final">
+  <img src="anime-couple.jpg">
+</div>
+
+<script>
+setTimeout(() => {
+  document.getElementById("name").style.opacity = 1;
+  confetti({
+    particleCount: 600,
+    spread: 360,
+    shapes: ['heart'],
+    colors: ['#ff2d6f','#ff5fa2','#ffffff']
+  });
+}, 2200);
+
+setTimeout(() => {
+  document.getElementById("ring").style.display = "block";
+}, 3000);
+
+setTimeout(() => {
+  document.getElementById("final").style.display = "flex";
+}, 4200);
+</script>
+
+</body>
+</html>
+`);
 }
 </script>
 
