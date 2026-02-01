@@ -30,15 +30,8 @@
     h1 {
       color: white;
       font-size: 36px;
-      margin-bottom: 20px;
-      text-shadow: 0 4px 10px rgba(0,0,0,0.4);
-    }
-
-    .hero-img {
-      width: 260px;
-      border-radius: 20px;
       margin-bottom: 25px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      text-shadow: 0 4px 10px rgba(0,0,0,0.4);
     }
 
     button {
@@ -60,7 +53,7 @@
       position: absolute;
     }
 
-    /* Shake */
+    /* Shake animation */
     @keyframes shake {
       0% { transform: translateX(0); }
       25% { transform: translateX(-6px); }
@@ -88,7 +81,7 @@
       100% { transform: translateY(120vh) rotate(360deg); opacity: 0.7; }
     }
 
-    /* Full-screen image on YES */
+    /* Full-screen reveal image */
     .center-img {
       position: fixed;
       inset: 0;
@@ -111,19 +104,12 @@
   <div class="container">
     <h1>Will you be my Valentine? 💘</h1>
 
-    <!-- 🔹 YOUR IMAGE HERE -->
-    <!-- Option A: Image inside repo -->
-    <img src="anime-love.png" class="hero-img" alt="Anime Love">
-
-    <!-- Option B: Direct image URL -->
-    <!-- <img src="https://your-image-link.png" class="hero-img"> -->
-
     <button id="yes" onclick="yesClicked()">Yes ❤️</button>
     <button id="no" onmouseover="moveNo()" onclick="moveNo()">No ❌</button>
   </div>
 
   <script>
-    // Sakura rain from start
+    // Start sakura rain immediately
     function startSakura() {
       setInterval(() => {
         const petal = document.createElement("img");
@@ -151,16 +137,18 @@
     }
 
     function yesClicked() {
+      // Confetti explosion
       confetti({
         particleCount: 500,
         spread: 140,
         origin: { y: 0.6 }
       });
 
+      // Show your uploaded image full screen
       const center = document.createElement("div");
       center.className = "center-img";
       center.innerHTML = `
-        <img src="anime-kiss.gif">
+        <img src="anime-couple.jpg" alt="Anime Couple">
       `;
       document.body.appendChild(center);
     }
