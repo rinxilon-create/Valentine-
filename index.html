@@ -8,8 +8,8 @@
 
 <style>
 body {
-  height: 100vh;
   margin: 0;
+  height: 100vh;
   background: linear-gradient(135deg, #ff6fa5, #ff9a9e);
   font-family: Arial, sans-serif;
   overflow: hidden;
@@ -53,7 +53,7 @@ button {
   position: absolute;
 }
 
-/* Falling petals */
+/* Sakura petals */
 .petal {
   position: fixed;
   top: -50px;
@@ -183,7 +183,7 @@ setInterval(() => {
   setTimeout(() => p.remove(), 9000);
 }, 300);
 
-// No button escape
+// No button dodge
 function moveNo() {
   const no = document.getElementById("no");
   no.style.left = Math.random() * (window.innerWidth - 120) + "px";
@@ -196,18 +196,17 @@ function yesClicked() {
   document.getElementById("main").style.display = "none";
   document.getElementById("giftModal").style.display = "flex";
 
-  // Gift box click → show fireworks
   document.getElementById("giftBox").onclick = () => {
     document.getElementById("giftText").style.display = "block";
     document.getElementById("giftModal").style.display = "none";
     document.getElementById("scene").style.display = "block";
 
-    // Rocket + Diwali fireworks
+    // Rocket fireworks
     setTimeout(() => {
       confetti({
-        particleCount: 600,
+        particleCount: 800,
         spread: 360,
-        shapes: ['circle', 'star', 'heart'],
+        shapes: ['circle','star','heart'],
         colors: ['#ff2d6f','#ff5fa2','#ffffff','#ffff00','#ff6a00']
       });
     }, 2200);
