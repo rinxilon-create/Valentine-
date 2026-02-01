@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Be My Valentine 💖</title>
 
-  <!-- Confetti -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
@@ -53,7 +52,6 @@
       position: absolute;
     }
 
-    /* Shake animation */
     @keyframes shake {
       0% { transform: translateX(0); }
       25% { transform: translateX(-6px); }
@@ -66,7 +64,6 @@
       animation: shake 0.25s;
     }
 
-    /* Sakura petals */
     .petal {
       position: fixed;
       top: -50px;
@@ -81,7 +78,6 @@
       100% { transform: translateY(120vh) rotate(360deg); opacity: 0.7; }
     }
 
-    /* Full-screen reveal image */
     .center-img {
       position: fixed;
       inset: 0;
@@ -109,7 +105,6 @@
   </div>
 
   <script>
-    // Start sakura rain immediately
     function startSakura() {
       setInterval(() => {
         const petal = document.createElement("img");
@@ -137,18 +132,16 @@
     }
 
     function yesClicked() {
-      // Confetti explosion
       confetti({
         particleCount: 500,
         spread: 140,
         origin: { y: 0.6 }
       });
 
-      // Show your uploaded image full screen
       const center = document.createElement("div");
       center.className = "center-img";
       center.innerHTML = `
-        <img src="anime-couple.jpg" alt="Anime Couple">
+        <img src="anime-couple.jpg">
       `;
       document.body.appendChild(center);
     }
