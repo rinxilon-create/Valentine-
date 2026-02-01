@@ -16,6 +16,8 @@ body {
 }
 
 .container {
+  position: relative;
+  z-index: 3;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -55,11 +57,13 @@ button {
   top: -50px;
   width: 35px;
   pointer-events: none;
+  z-index: 2;
   animation: fall linear infinite;
 }
 
 @keyframes fall {
-  to { transform: translateY(120vh) rotate(360deg); }
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(120vh) rotate(360deg); }
 }
 </style>
 </head>
@@ -75,128 +79,97 @@ button {
 <script>
 // Sakura petals
 setInterval(() => {
-  const p = document.createElement("img");
-  p.src = "https://i.imgur.com/JYUB0m3.png";
-  p.className = "petal";
-  p.style.left = Math.random() * 100 + "vw";
-  p.style.animationDuration = 5 + Math.random() * 3 + "s";
-  document.body.appendChild(p);
-  setTimeout(() => p.remove(), 9000);
+  const petal = document.createElement("img");
+  petal.src = "https://i.imgur.com/JYUB0m3.png";
+  petal.className = "petal";
+  petal.style.left = Math.random() * 100 + "vw";
+  petal.style.animationDuration = 5 + Math.random() * 3 + "s";
+  document.body.appendChild(petal);
+  setTimeout(() => petal.remove(), 9000);
 }, 300);
 
-// No button escape
+// No button dodge
 function moveNo() {
   const no = document.getElementById("no");
   no.style.left = Math.random() * (window.innerWidth - 120) + "px";
   no.style.top = Math.random() * (window.innerHeight - 80) + "px";
 }
 
-// YES button
+// YES clicked
 function yesClicked() {
   confetti({ particleCount: 300, spread: 140 });
 
   const win = window.open("", "_blank", "width=600,height=800");
 
   win.document.write(`
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Surprise 💖</title>
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-<style>
-body {
-  margin: 0;
-  height: 100vh;
-  background: radial-gradient(circle, #ff5fa2, #ff2d6f);
-  overflow: hidden;
-  font-family: Arial, sans-serif;
-}
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Surprise 💖</title>
+      <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+      <style>
+        body {
+          margin: 0;
+          background: radial-gradient(circle, #ff5fa2, #ff2d6f);
+          overflow: hidden;
+          display: flex;
+          justify-content: center;
+          align-items: flex-end;
+          height: 100vh;
+        }
 
-.rocket {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 80px;
-  animation: launch 2.5s ease-out forwards;
-}
+        .rocket {
+          font-size: 80px;
+          animation: launch 2.5s ease-out forwards;
+        }
 
-@keyframes launch {
-  to { transform: translate(-50%, -120vh); }
-}
+        @keyframes launch {
+          0% { transform: translateY(0); }
+          100% { transform: translateY(-120vh); }
+        }
 
-.name {
-  position: absolute;
-  top: 40%;
-  width: 100%;
-  text-align: center;
-  font-size: 48px;
-  color: white;
-  font-weight: bold;
-  opacity: 0;
-  text-shadow: 0 0 20px #fff, 0 0 40px #ff5fa2;
-}
+        .image {
+          position: fixed;
+          inset: 0;
+          background: black;
+          display: none;
+          justify-content: center;
+          align-items: center;
+        }
 
-.ring {
-  position: absolute;
-  top: 52%;
-  width: 100%;
-  text-align: center;
-  font-size: 70px;
-  display: none;
-}
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      </style>
+    </head>
+    <body>
 
-.final {
-  position: fixed;
-  inset: 0;
-  background: black;
-  display: none;
-  justify-content: center;
-  align-items: center;
-}
+      <div class="rocket">🚀</div>
 
-.final img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-</style>
-</head>
+      <div class="image" id="final">
+        <img src="anime-couple.jpg">
+      </div>
 
-<body>
+      <script>
+        setTimeout(() => {
+          confetti({
+            particleCount: 500,
+            spread: 360,
+            shapes: ['heart'],
+            colors: ['#ff2d6f', '#ff5fa2', '#ffffff']
+          });
+        }, 2200);
 
-<div class="rocket">🚀</div>
-<div class="name" id="name">Anam 💖</div>
-<div class="ring" id="ring">💍</div>
+        setTimeout(() => {
+          document.querySelector('.image').style.display = 'flex';
+        }, 3200);
+      </script>
 
-<div class="final" id="final">
-  <img src="anime-couple.jpg">
-</div>
-
-<script>
-setTimeout(() => {
-  document.getElementById("name").style.opacity = 1;
-  confetti({
-    particleCount: 600,
-    spread: 360,
-    shapes: ['heart'],
-    colors: ['#ff2d6f','#ff5fa2','#ffffff']
-  });
-}, 2200);
-
-setTimeout(() => {
-  document.getElementById("ring").style.display = "block";
-}, 3000);
-
-setTimeout(() => {
-  document.getElementById("final").style.display = "flex";
-}, 4200);
-</script>
-
-</body>
-</html>
-`);
+    </body>
+    </html>
+  `);
 }
 </script>
 
