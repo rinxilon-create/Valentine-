@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -11,26 +11,34 @@
     body {
       height: 100vh;
       margin: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       background: linear-gradient(135deg, #ff6fa5, #ff9a9e);
       font-family: Arial, sans-serif;
       overflow: hidden;
     }
 
     .container {
-      text-align: center;
-      background: white;
-      padding: 40px;
-      border-radius: 20px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+      position: relative;
       z-index: 3;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
     }
 
     h1 {
-      color: #ff3d81;
+      color: white;
+      font-size: 36px;
+      margin-bottom: 20px;
+      text-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    }
+
+    .hero-img {
+      width: 260px;
+      border-radius: 20px;
       margin-bottom: 25px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
 
     button {
@@ -39,7 +47,7 @@
       border: none;
       border-radius: 30px;
       cursor: pointer;
-      margin: 15px;
+      margin: 12px;
     }
 
     #yes {
@@ -48,11 +56,11 @@
     }
 
     #no {
-      background: #ddd;
+      background: #eee;
       position: absolute;
     }
 
-    /* Shake animation */
+    /* Shake */
     @keyframes shake {
       0% { transform: translateX(0); }
       25% { transform: translateX(-6px); }
@@ -69,9 +77,9 @@
     .petal {
       position: fixed;
       top: -50px;
-      width: 40px;
+      width: 35px;
       pointer-events: none;
-      z-index: 6;
+      z-index: 2;
       animation: fall linear infinite;
     }
 
@@ -80,8 +88,8 @@
       100% { transform: translateY(120vh) rotate(360deg); opacity: 0.7; }
     }
 
-    /* Full-screen anime GIF */
-    .center-gif {
+    /* Full-screen image on YES */
+    .center-img {
       position: fixed;
       inset: 0;
       background: black;
@@ -91,7 +99,7 @@
       z-index: 10;
     }
 
-    .center-gif img {
+    .center-img img {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -102,11 +110,35 @@
 
   <div class="container">
     <h1>Will you be my Valentine? 💘</h1>
+
+    <!-- 🔹 YOUR IMAGE HERE -->
+    <!-- Option A: Image inside repo -->
+    <img src="anime-love.png" class="hero-img" alt="Anime Love">
+
+    <!-- Option B: Direct image URL -->
+    <!-- <img src="https://your-image-link.png" class="hero-img"> -->
+
     <button id="yes" onclick="yesClicked()">Yes ❤️</button>
     <button id="no" onmouseover="moveNo()" onclick="moveNo()">No ❌</button>
   </div>
 
   <script>
+    // Sakura rain from start
+    function startSakura() {
+      setInterval(() => {
+        const petal = document.createElement("img");
+        petal.src = "https://i.imgur.com/JYUB0m3.png";
+        petal.className = "petal";
+        petal.style.left = Math.random() * 100 + "vw";
+        petal.style.animationDuration = 5 + Math.random() * 3 + "s";
+        document.body.appendChild(petal);
+
+        setTimeout(() => petal.remove(), 9000);
+      }, 300);
+    }
+
+    startSakura();
+
     function moveNo() {
       const noBtn = document.getElementById("no");
       noBtn.classList.add("shake");
@@ -118,45 +150,19 @@
       noBtn.style.top = y + "px";
     }
 
-    function createPetals() {
-      for (let i = 0; i < 35; i++) {
-        const petal = document.createElement("img");
-        petal.src = "https://i.imgur.com/JYUB0m3.png"; // sakura petal
-        petal.className = "petal";
-        petal.style.left = Math.random() * 100 + "vw";
-        petal.style.animationDuration = 4 + Math.random() * 3 + "s";
-        petal.style.animationDelay = Math.random() * 2 + "s";
-        document.body.appendChild(petal);
-
-        setTimeout(() => petal.remove(), 9000);
-      }
-    }
-
     function yesClicked() {
-      // Confetti
       confetti({
         particleCount: 500,
         spread: 140,
         origin: { y: 0.6 }
       });
 
-      // Sakura rain
-      createPetals();
-
-      // Anime kissing GIF (ROMANTIC)
       const center = document.createElement("div");
-      center.className = "center-gif";
+      center.className = "center-img";
       center.innerHTML = `
-        <img src="https://media.giphy.com/media/11ym3PXdJzS2iQ/giphy.gif">
+        <img src="anime-kiss.gif">
       `;
       document.body.appendChild(center);
-
-      // Optional WhatsApp redirect
-      setTimeout(() => {
-        window.location.href =
-          "https://wa.me/?text=" +
-          encodeURIComponent("I just said YES ❤️🌸 This felt like an anime confession scene!");
-      }, 4500);
     }
   </script>
 
