@@ -57,7 +57,7 @@ button {
 .petal {
   position: fixed;
   top: -50px;
-  width: 35px;
+  width: 32px;
   pointer-events: none;
   z-index: 2;
   animation: fall linear infinite;
@@ -67,62 +67,29 @@ button {
   to { transform: translateY(120vh) rotate(360deg); }
 }
 
-/* Gift modal */
-.gift-modal {
+/* Gift message screen */
+.message-screen {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
-}
-
-.gift-box {
-  width: 220px;
-  height: 220px;
-  background: #ff3d81;
-  border-radius: 18px;
-  position: relative;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 60px;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.4);
-}
-
-.gift-text {
-  display: none;
+  background: black;
   color: white;
-  font-size: 20px;
-  text-align: center;
-  padding: 20px;
-  font-weight: bold;
-}
-
-/* Rocket fireworks scene */
-.scene {
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(circle, #ff5fa2, #ff2d6f);
   display: none;
-  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 32px;
   z-index: 15;
+  padding: 30px;
+  animation: fadeIn 2s forwards;
 }
 
-.rocket {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 80px;
-  animation: launch 2.5s ease-out forwards;
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-@keyframes launch {
-  from { transform: translate(-50%, 0); }
-  to { transform: translate(-50%, -120vh); }
+@keyframes fadeOut {
+  to { opacity: 0; }
 }
 
 /* Final image */
@@ -152,18 +119,9 @@ button {
   <button id="no" onmouseover="moveNo()">No ❌</button>
 </div>
 
-<!-- Gift modal -->
-<div class="gift-modal" id="giftModal" style="display:none;">
-  <div class="gift-box" id="giftBox">🎁
-    <div class="gift-text" id="giftText">
-      You're my love 💍<br>We are married soon ❤️
-    </div>
-  </div>
-</div>
-
-<!-- Rocket fireworks scene -->
-<div class="scene" id="scene">
-  <div class="rocket">🚀</div>
+<!-- Message screen -->
+<div class="message-screen" id="message">
+  My love, we are to be married soon 💍❤️
 </div>
 
 <!-- Final image -->
@@ -190,33 +148,50 @@ function moveNo() {
   no.style.top = Math.random() * (window.innerHeight - 80) + "px";
 }
 
-// YES clicked → show gift box
+// YES clicked flow
 function yesClicked() {
-  confetti({ particleCount: 300, spread: 140 });
+  confetti({ particleCount: 200, spread: 160 });
+
   document.getElementById("main").style.display = "none";
-  document.getElementById("giftModal").style.display = "flex";
+  const msg = document.getElementById("message");
+  msg.style.display = "flex";
 
-  document.getElementById("giftBox").onclick = () => {
-    document.getElementById("giftText").style.display = "block";
-    document.getElementById("giftModal").style.display = "none";
-    document.getElementById("scene").style.display = "block";
+  // Show message for 12 seconds
+  setTimeout(() => {
+    msg.style.animation = "fadeOut 2s forwards";
+  }, 12000);
 
-    // Rocket fireworks
-    setTimeout(() => {
-      confetti({
-        particleCount: 800,
-        spread: 360,
-        shapes: ['circle','star','heart'],
-        colors: ['#ff2d6f','#ff5fa2','#ffffff','#ffff00','#ff6a00']
-      });
-    }, 2200);
+  // Start realistic fireworks
+  setTimeout(() => {
+    msg.style.display = "none";
+    startFireworks();
+  }, 14000);
 
-    // Show final image
-    setTimeout(() => {
-      document.getElementById("scene").style.display = "none";
-      document.getElementById("final").style.display = "flex";
-    }, 3200);
-  };
+  // Show final image
+  setTimeout(() => {
+    document.getElementById("final").style.display = "flex";
+  }, 20000);
+}
+
+// Realistic fireworks
+function startFireworks() {
+  const duration = 6000;
+  const end = Date.now() + duration;
+
+  (function frame() {
+    confetti({
+      particleCount: 120,
+      startVelocity: 45,
+      spread: 360,
+      ticks: 200,
+      origin: {
+        x: Math.random(),
+        y: Math.random() * 0.6
+      },
+      colors: ['#ff004c','#ff7aa2','#ffffff','#ffd700']
+    });
+    if (Date.now() < end) requestAnimationFrame(frame);
+  })();
 }
 </script>
 
