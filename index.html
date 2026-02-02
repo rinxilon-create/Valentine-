@@ -15,32 +15,28 @@ body {
   overflow: hidden;
 }
 
-/* Main container */
 .container {
-  position: relative;
-  z-index: 5;
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
+  z-index: 5;
 }
 
 h1 {
   color: white;
-  font-size: 36px;
-  margin-bottom: 25px;
-  text-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  font-size: 34px;
+  margin-bottom: 20px;
 }
 
 button {
-  padding: 14px 32px;
+  padding: 14px 30px;
   font-size: 18px;
-  border: none;
   border-radius: 30px;
+  border: none;
   cursor: pointer;
-  margin: 12px;
 }
 
 #yes {
@@ -57,9 +53,8 @@ button {
 .petal {
   position: fixed;
   top: -50px;
-  width: 32px;
+  width: 30px;
   pointer-events: none;
-  z-index: 2;
   animation: fall linear infinite;
 }
 
@@ -67,29 +62,35 @@ button {
   to { transform: translateY(120vh) rotate(360deg); }
 }
 
-/* Gift message screen */
-.message-screen {
+/* Gift box */
+.gift-screen {
   position: fixed;
   inset: 0;
-  background: black;
-  color: white;
+  background: rgba(0,0,0,0.6);
   display: none;
   justify-content: center;
   align-items: center;
+  z-index: 10;
+}
+
+.gift-box {
+  width: 240px;
+  height: 240px;
+  background: #ff3d81;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+  color: white;
   text-align: center;
-  font-size: 32px;
-  z-index: 15;
-  padding: 30px;
-  animation: fadeIn 2s forwards;
+  padding: 20px;
+  animation: pop 0.6s ease;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes fadeOut {
-  to { opacity: 0; }
+@keyframes pop {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
 }
 
 /* Final image */
@@ -100,7 +101,7 @@ button {
   display: none;
   justify-content: center;
   align-items: center;
-  z-index: 20;
+  z-index: 15;
 }
 
 .final img {
@@ -119,9 +120,13 @@ button {
   <button id="no" onmouseover="moveNo()">No ❌</button>
 </div>
 
-<!-- Message screen -->
-<div class="message-screen" id="message">
-  My love, we are to be married soon 💍❤️
+<!-- Gift message -->
+<div class="gift-screen" id="gift">
+  <div class="gift-box">
+    🎁<br><br>
+    My love,<br>
+    we are to be married soon 💍❤️
+  </div>
 </div>
 
 <!-- Final image -->
@@ -130,68 +135,64 @@ button {
 </div>
 
 <script>
-// Sakura petals
+// Sakura petals (light)
 setInterval(() => {
   const p = document.createElement("img");
   p.src = "https://i.imgur.com/JYUB0m3.png";
   p.className = "petal";
   p.style.left = Math.random() * 100 + "vw";
-  p.style.animationDuration = 5 + Math.random() * 3 + "s";
+  p.style.animationDuration = 6 + Math.random() * 3 + "s";
   document.body.appendChild(p);
   setTimeout(() => p.remove(), 9000);
-}, 300);
+}, 500);
 
-// No button dodge
+// No button escape
 function moveNo() {
   const no = document.getElementById("no");
   no.style.left = Math.random() * (window.innerWidth - 120) + "px";
   no.style.top = Math.random() * (window.innerHeight - 80) + "px";
 }
 
-// YES clicked flow
+// YES flow
 function yesClicked() {
-  confetti({ particleCount: 200, spread: 160 });
-
   document.getElementById("main").style.display = "none";
-  const msg = document.getElementById("message");
-  msg.style.display = "flex";
 
-  // Show message for 12 seconds
+  // Soft confetti burst
+  confetti({ particleCount: 150, spread: 120 });
+
+  const gift = document.getElementById("gift");
+  gift.style.display = "flex";
+
+  // Keep gift for 8 seconds
   setTimeout(() => {
-    msg.style.animation = "fadeOut 2s forwards";
-  }, 12000);
+    gift.style.display = "none";
 
-  // Start realistic fireworks
-  setTimeout(() => {
-    msg.style.display = "none";
-    startFireworks();
-  }, 14000);
+    // Short realistic fireworks (NO lag)
+    fireworkBurst();
+    setTimeout(fireworkBurst, 600);
+    setTimeout(fireworkBurst, 1200);
 
-  // Show final image
+  }, 8000);
+
+  // Show image
   setTimeout(() => {
     document.getElementById("final").style.display = "flex";
-  }, 20000);
+  }, 10500);
 }
 
-// Realistic fireworks
-function startFireworks() {
-  const duration = 6000;
-  const end = Date.now() + duration;
-
-  (function frame() {
-    confetti({
-      particleCount: 120,
-      startVelocity: 45,
-      spread: 360,
-      ticks: 200,
-      origin: {
-        x: Math.random(),
-        y: Math.random() * 0.6
-      },
-      colors: ['#ff004c','#ff7aa2','#ffffff','#ffd700']
-    });
-    if (Date.now() < end) requestAnimationFrame(frame);
-  })();
+// Optimized fireworks
+function fireworkBurst() {
+  confetti({
+    particleCount: 180,
+    startVelocity: 35,
+    spread: 360,
+    ticks: 120,
+    origin: {
+      x: Math.random(),
+      y: Math.random() * 0.6
+    },
+    colors: ['#ff004c','#ff7aa2','#ffd700','#ffffff']
+  });
 }
 </script>
 
